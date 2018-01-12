@@ -1,26 +1,65 @@
-const axios = require('axios')
 if (process.argv.length < 3 || process.argv[2] === '') {
   console.error('Error: no library file specified')
   process.exit(1)
 }
 
-const endpoint = 'http://ec2-35-176-229-86.eu-west-2.compute.amazonaws.com:8080/db'
+console.log('Preparing...')
+const axios = require('axios')
 const getItunesTracks = require('@johnpaulvaughan/itunes-music-library-tracks').getItunesTracks
+const endpoint = 'http://ec2-35-176-229-86.eu-west-2.compute.amazonaws.com:8080/db'
 const validXMLpath = process.argv[2]
 
-const trackStream = getItunesTracks(validXMLpath)
+const localRecord = {
+  library: [],
+  new: {
+    artists: [],
+    structure: {}
+  }
+}
+const remoteRecord = {}
 
-trackStream.on('data', function (rawStream) {
-  const track = JSON.parse(rawStream)
-  axios.get(endpoint + `/artists?filter={'name':'${track.Artist}'}&pagesize=1`).then((response) => {
-    console.log(response.data._returned)
+buildRemoteRecord();
+function buildRemoteRecord () {
+  console.log('[Stage 1] Downloading latest library')
+  axios.get(endpoint + `/artists?keys={'id':1}`).then((response) => {
+    response.data._embedded.forEach(artist => {
+      remoteRecord[artist.id] = artist.albums 
+    })
+    console.log(remoteRecord)
+    console.log('[Stage 1] Download complete')
+    parseItunesLibrary()
   })
-})
+}
 
-trackStream.on('error', function (err) {
-  console.log(err)
-})
+function parseItunesLibrary () {
+  console.log('[Stage 2] Converting iTunes library')
+  const trackStream = getItunesTracks(validXMLpath)
 
-trackStream.on('end', () => {
-  console.log('Library processing completed successfully')
-})
+  trackStream.on('data', function (rawStream) {
+    const track = JSON.parse(rawStream)
+    if (!(track.Artist in remoteRecord) && !localRecord.new.artists.includes(track.Artist)) {
+      localRecord.new.artists.push(track.Artist)
+      localRecord.new.structure[track.Artist] = []
+    }
+    if ((!(track.Artist in remoteRecord) || !remoteRecord[track.Artist].includes(track.Album)) && !localRecord.new.structure[track.Artist].includes(track.Album)) {
+      localRecord.new.structure[track.Artist].push(track.Album)
+    }
+    localRecord.library.push(track)
+  })
+
+  trackStream.on('error', function (err) {
+    console.log(err)
+  })
+
+  trackStream.on('end', () => {
+    console.log(localRecord.new.artists.length + ' new artists found')
+    console.log('[Stage 1] Library processed and converted successfully')
+    uploadLibraryViaApi()
+  })
+}
+
+function uploadLibraryViaApi () {
+  console.log('[Stage 2] Adding to remote library (Do not disconnect from network)')
+  let message = []
+  Object.keys()
+}
