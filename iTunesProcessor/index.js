@@ -13,17 +13,19 @@ const localRecord = {
   library: [],
   new: {
     artists: [],
-    structure: {}
+    structure: {
+      fakeArtist: ['fakealbum', 'fakealbum2']
+    }
   }
 }
 const remoteRecord = {}
 
-buildRemoteRecord();
+buildRemoteRecord()
 function buildRemoteRecord () {
   console.log('[Stage 1] Downloading latest library')
   axios.get(endpoint + `/artists?keys={'id':1}`).then((response) => {
     response.data._embedded.forEach(artist => {
-      remoteRecord[artist.id] = artist.albums 
+      remoteRecord[artist.id] = artist.albums
     })
     console.log(remoteRecord)
     console.log('[Stage 1] Download complete')
@@ -60,6 +62,14 @@ function parseItunesLibrary () {
 
 function uploadLibraryViaApi () {
   console.log('[Stage 2] Adding to remote library (Do not disconnect from network)')
-  let message = []
-  Object.keys()
+  Object.keys(localRecord.new.structure).forEach(artist => {
+    const discography = localRecord.new.structure[artist].map(album => { 
+      return {
+        title: album
+      }
+    })
+    axios.post(endpoint + '/albums', discography).then(response => {
+      console.log(response.data._links['rh:newdoc'])
+    })
+  })
 }

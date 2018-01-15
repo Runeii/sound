@@ -7,7 +7,7 @@ Vue.use(Vuex)
 const state = {
   currentTrackId: 2,
   queuedTracks: []
-} 
+}
 
 const getters = {
   getTrackFromLibrary: (state) => (id) => {

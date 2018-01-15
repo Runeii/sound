@@ -1,6 +1,6 @@
 export default {
   data () {
-    return {  
+    return {
     }
   },
   computed: {
@@ -13,7 +13,7 @@ export default {
       this.$store.dispatch('getTracks')
     },
     displayTrackOptionsMenu (id) {
-      const response = confirm('Play immediately?')
+      const response = confirm('Play immediately?') // eslint-disable-line
       if (response === true) {
         this.playTrack(id)
       } else {
