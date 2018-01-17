@@ -1,13 +1,13 @@
 const { authenticate } = require('@feathersjs/authentication').hooks;
-const preProcessTrack = require('../../hooks/pre-process-track');
-const postProcessTrack = require('../../hooks/post-process-track');
+
+const upsert = require('../../hooks/upsert');
 
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
+    all: [ authenticate('jwt') ],
     find: [],
     get: [],
-    create: [preProcessTrack()],
+    create: [upsert()],
     update: [],
     patch: [],
     remove: []
@@ -17,7 +17,7 @@ module.exports = {
     all: [],
     find: [],
     get: [],
-    create: [postProcessTrack()],
+    create: [],
     update: [],
     patch: [],
     remove: []
