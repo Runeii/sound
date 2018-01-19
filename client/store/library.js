@@ -1,30 +1,30 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
+import Nedb from 'nedb'
+import { remote } from 'electron'
+
+const db = new Nedb({ filename: remote.app.getPath('userData') + '/database.db', autoload: true })
 
 Vue.use(Vuex)
 
 const state = {
-  records: {
-    artists: [],
-    albums: [],
-    tracks: []
-  }
-} 
+  records: []
+}
 
 const getters = {
 }
 
 const mutations = {
   STORE_TRACKS (state, data) {
-    Vue.set(state.records, 'tracks', data)
+    state.records = data
   }
 }
 
 const actions = {
   getTracks ({ commit }) {
-    axios.get('/db/library').then(response => {
-      commit('STORE_TRACKS', response.data._embedded)
+    db.find({}, { artist: 1, title: 1, album: 1 }, function (err, docs) {
+      console.log(err)
+      commit('STORE_TRACKS', docs)
     })
   }
 }

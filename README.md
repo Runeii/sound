@@ -9,7 +9,10 @@ $ npm install
 To develop:
 
 ```bash
-$ npm run dev```
+$ npm run dev
+# in a new tab, run electron app
+$ npm run app
+```
 
 To build for production:
 

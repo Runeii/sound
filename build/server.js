@@ -38,10 +38,7 @@ const server = new Server(compiler, Object.assign({
   historyApiFallback: true,
   overlay: true,
   disableHostCheck: true,
-  publicPath: compiler.options.publicPath,
-  proxy: {
-    "/db": "http://ec2-35-176-229-86.eu-west-2.compute.amazonaws.com:8080"
-  }
+  publicPath: compiler.options.publicPath
 }, devServerOptions))
 
 server.listen(port, host)

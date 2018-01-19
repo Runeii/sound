@@ -11,15 +11,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: Player
+      component: Player,
+      name: 'Now Playing'
     },
     {
       path: '/library',
-      component: Library
+      component: Library,
+      name: 'Library'
     },
     {
       path: '/settings',
-      component: Settings
+      component: Settings,
+      name: 'Settings'
     }
   ]
 })

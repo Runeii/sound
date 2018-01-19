@@ -20,6 +20,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('getTracks')
     this.audioObject = document.createElement('audio')
     this.audioObject.addEventListener('timeupdate', this._handlePlayingUI)
     this.audioObject.addEventListener('loadeddata', this._handleLoaded)

@@ -11,10 +11,11 @@ const state = {
 
 const getters = {
   getTrackFromLibrary: (state) => (id) => {
-    return state.library.records.tracks.find((track) => { return track.id === id })
+    return state.library.records.find((track) => { return track.id === id })
   },
   currentTrack: (state, getters) => {
-    return getters.getTrackFromLibrary(state.currentTrackId)
+    const currentTrack = getters.getTrackFromLibrary(state.currentTrackId)
+    return currentTrack || {}
   }
 }
 

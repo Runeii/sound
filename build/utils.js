@@ -10,15 +10,15 @@ _.cwd = (file) => {
 }
 
 _.cssLoader = config.cssModules ?
-  'css-loader?-autoprefixer&modules&importLoaders=1&localIdentName=[name]__[local]' :
+  'css-loader?-autoprefixer&modules&importLoaders=1&localIdentName=[local]' :
   'css-loader?-autoprefixer'
 
 _.cssProcessors = [
   {loader: '', test: /\.css$/},
-  {loader: 'sass-loader?sourceMap', test: /\.scss$/},
-  {loader: 'less-loader?sourceMap', test: /\.less$/},
-  {loader: 'stylus-loader?sourceMap', test: /\.styl$/},
-  {loader: 'sass-loader?indentedSyntax&sourceMap', test: /\.sass$/},
+  {loader: 'sass-loader', options: { sourceMap: true }, test: /\.scss$/},
+  {loader: 'less-loader', options: { sourceMap: true }, test: /\.less$/},
+  {loader: 'stylus-loader', options: { sourceMap: true }, test: /\.styl$/},
+  {loader: 'sass-loader?indentedSyntax', options: { sourceMap: true }, test: /\.sass$/},
 ]
 
 _.outputPath = config.electron ?
