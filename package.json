@@ -26,7 +26,12 @@
         {
           "useBuiltIns": true
         }
-      ]
+      ],
+      ["env", {
+        "targets": {
+          "browsers": ["last 2 versions", "safari >= 7"]
+        }
+      }]
     ]
   },
   "postcss": {
@@ -58,8 +63,10 @@
     "autoprefixer": "^7.0.0",
     "babel-core": "^6.16.0",
     "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-latest": "^6.24.1",
     "babel-preset-vue-app": "^2.0.0",
-    "chalk": "^1.1.3",
+    "chalk": "^2.3.0",
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.0",
