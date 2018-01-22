@@ -21,7 +21,7 @@ if (isDev) {
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, titleBarStyle: 'hidden'})
 
   // and load the index.html of the app.
   const url = isDev ? `http://${config.devServer.host}:${config.devServer.port}` : `file://${__dirname}/dist/index.html`
@@ -70,3 +70,27 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+electron.ipcMain.on('open-dialog', (event, params) => {
+  console.log(params)
+  electron.dialog.showOpenDialog(params, result => {
+    event.sender.send('open-dialog-reply', result)
+  })
+})
+
+const path = require('path')
+const fork = require('child_process').fork
+electron.ipcMain.on('import-library', (event, libraryPath) => {
+  const program = path.resolve('./app/scripts/importLibrary.js')
+  const child = fork(program, [], { stdio: ['ipc'] })
+  child.send(libraryPath)
+  child.on('message', ({ type, data }) => {
+    if (type === 'track') {
+      event.sender.send('import-library-update', data)
+    } else if (type === 'error') {
+      child.disconnect()
+    } else if (type === 'end') {
+      event.sender.send('import-library-complete', true)
+      child.disconnect()
+    }
+  })
+})

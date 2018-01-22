@@ -9,6 +9,13 @@
                 'segoe ui', arial,
                 sans-serif;
   }
+  /* Account for system buttons */
+  body, #header {
+    padding-top: 20px;
+  }
+  #sidebar {
+    top: 20px;
+  }
   .page {
     text-align: center;
   }

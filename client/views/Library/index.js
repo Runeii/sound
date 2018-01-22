@@ -5,7 +5,15 @@ export default {
   },
   computed: {
     library () {
-      return this.$store.state.library.records
+      return this.$store.state.library.records || []
+    },
+    headers () {
+      if (this.library[0]) {
+        return Object.keys(this.library[0]).map(key => {
+          return {text: key, value: key}
+        })
+      }
+      return []
     }
   },
   methods: {
@@ -29,11 +37,11 @@ export default {
     },
     renderTrackListing () {
       const rows = []
-      this.library.tracks.forEach(track => {
+      this.library.forEach(track => {
         rows.push(<tr>
-          <td>{track.title}</td>
-          <td>{track.artist}</td>
-          <td>{track.album}</td>
+          <td>{track.Name}</td>
+          <td>{track.Artist}</td>
+          <td>{track.Album}</td>
           <td><button class='' onClick={() => this.displayTrackOptionsMenu(track.id)}>...</button></td>
         </tr>)
       })
@@ -42,19 +50,8 @@ export default {
   },
   render (h) {
     return (
-      <div class=''>
-        <button onClick={this.updateLibrary}>Update</button>
-        <table class=''>
-          <thead>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Album</th>
-          </thead>
-          <tbody>
-            {this.renderTrackListing()}
-          </tbody>
-        </table>
-      </div>
+      <v-data-table headers={this.headers} items={this.library} class="elevation-1">
+      </v-data-table>
     )
   }
 }

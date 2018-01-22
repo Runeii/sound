@@ -15,6 +15,10 @@ const getters = {
 }
 
 const mutations = {
+  INSERT_TRACK (state, data) {
+    console.log('huh')
+    state.records.push(data)
+  },
   STORE_TRACKS (state, data) {
     state.records = data
   }
@@ -22,9 +26,13 @@ const mutations = {
 
 const actions = {
   getTracks ({ commit }) {
-    db.find({}, { artist: 1, title: 1, album: 1 }, function (err, docs) {
-      console.log(err)
+    db.find({}, { Artist: 1, Name: 1, Album: 1 }, function (err, docs) {
       commit('STORE_TRACKS', docs)
+    })
+  },
+  addTrack ({ commit }, data) {
+    db.insert(data, function (err, newDoc) {
+      commit('INSERT_TRACK', newDoc)
     })
   }
 }
