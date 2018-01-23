@@ -15,6 +15,9 @@ export default {
     }
   },
   computed: {
+    source () {
+      return this.track.src.file
+    },
     track () {
       return this.$store.getters.currentTrack
     }
@@ -45,9 +48,10 @@ export default {
       this.audioObject.currentTime = timing
     },
     play () {
-      if (this.audioObject.src !== this.track.src) {
-        this.audioObject.src = this.track.src
+      if (this.audioObject.src !== this.source) {
+        this.audioObject.src = this.source
       }
+      console.log(this.audioObject)
       this.audioObject.play()
     },
     pause () {

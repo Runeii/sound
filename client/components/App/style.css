@@ -13,6 +13,11 @@
   body, #header {
     padding-top: 20px;
   }
+  #header {
+    -webkit-user-select: none;
+    cursor: default;
+    -webkit-app-region: drag;
+  }
   #sidebar {
     top: 20px;
   }

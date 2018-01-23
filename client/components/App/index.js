@@ -1,3 +1,4 @@
+import { mapGetters } from 'vuex'
 import './style.css'
 
 export default {
@@ -7,6 +8,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['currentTrack']),
     sidebar () {
       return (
         <v-navigation-drawer id='sidebar' fixed clipped app v-model={this.drawer}>
@@ -16,10 +18,15 @@ export default {
               <v-list-tile-action>
                 <v-icon>play_arrow</v-icon>
               </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Now Playing</v-list-tile-title>
-                <v-list-tile-sub-title>Your status is visible to everyone</v-list-tile-sub-title>
-              </v-list-tile-content>
+              { this.currentTrack['_id'] 
+                ? <v-list-tile-content>
+                    <v-list-tile-title>Now Playing</v-list-tile-title>
+                    <v-list-tile-sub-title>{this.currentTrack.title} - {this.currentTrack.artist}</v-list-tile-sub-title>
+                  </v-list-tile-content>
+                : <v-list-tile-content style="opacity:0.5">
+                    <v-list-tile-title>Now Playing</v-list-tile-title>
+                    <v-list-tile-sub-title>Nothing playing</v-list-tile-sub-title>
+                  </v-list-tile-content> }
             </v-list-tile>
             <v-list-tile avatar on-click={this.$router.push({name: 'Library'})}>
               <v-list-tile-action>
@@ -55,6 +62,8 @@ export default {
         </v-navigation-drawer>
       )
     }
+  },
+  methods: {
   },
   mounted () {
     this.$store.dispatch('getTracks')

@@ -11,7 +11,7 @@ const state = {
 
 const getters = {
   getTrackFromLibrary: (state) => (id) => {
-    return state.library.records.find((track) => { return track.id === id })
+    return state.library.records.find((track) => { return track['_id'] === id })
   },
   currentTrack: (state, getters) => {
     const currentTrack = getters.getTrackFromLibrary(state.currentTrackId)

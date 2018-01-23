@@ -8,12 +8,12 @@ export default {
       return this.$store.state.library.records || []
     },
     headers () {
-      if (this.library[0]) {
-        return Object.keys(this.library[0]).map(key => {
-          return {text: key, value: key}
-        })
-      }
-      return []
+      return [
+        { text: 'Title', value: 'title', align: 'left'},
+        { text: 'Length', value: 'length' },
+        { text: 'Artist', value: 'artist', align: 'left' },
+        { text: 'Album', value: 'album', align: 'left' },
+      ]
     }
   },
   methods: {
@@ -21,10 +21,8 @@ export default {
       this.$store.dispatch('getTracks')
     },
     displayTrackOptionsMenu (id) {
-      const response = confirm('Play immediately?') // eslint-disable-line
+      const response = confirm('Add track to queue?') // eslint-disable-line
       if (response === true) {
-        this.playTrack(id)
-      } else {
         this.queueTrack(id)
       }
     },
@@ -35,23 +33,29 @@ export default {
     queueTrack (id) {
       this.$store.dispatch('queueTrack', id)
     },
-    renderTrackListing () {
-      const rows = []
-      this.library.forEach(track => {
-        rows.push(<tr>
-          <td>{track.Name}</td>
-          <td>{track.Artist}</td>
-          <td>{track.Album}</td>
-          <td><button class='' onClick={() => this.displayTrackOptionsMenu(track.id)}>...</button></td>
-        </tr>)
-      })
-      return rows
+    trackRow (track) {
+      return (
+        <tr onClick={() => this.playTrack(track._id)}>
+          <td>{track.title}</td>
+          <td>{track.length}</td>
+          <td>{track.artist}</td>
+          <td>{track.album}</td>
+          <td>
+            <v-icon onClick={() => this.displayTrackOptionsMenu(track._id)}>more_horiz</v-icon>
+          </td>
+        </tr>
+      )
     }
   },
   render (h) {
     return (
-      <v-data-table headers={this.headers} items={this.library} class="elevation-1">
-      </v-data-table>
+      <v-data-table hide-actions headers={this.headers} items={this.library} class="elevation-1" { ...{
+        scopedSlots: {
+          items: items => {
+            return this.trackRow(items.item)
+          }
+        }
+      } }></v-data-table>
     )
   }
 }

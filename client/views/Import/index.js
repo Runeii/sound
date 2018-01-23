@@ -21,6 +21,13 @@ export default {
     this.activity = false
   },
   computed: {
+    completedButton () {
+      return (
+        <v-btn>
+        Complete
+        </v-btn>
+      )
+    },
     detectingButton () {
       return (
         <v-btn loading={this.detecting} disabled={this.detecting}>
@@ -91,7 +98,19 @@ export default {
       this.activity = true
       ipcRenderer.send('import-library', this.itunesPath)
       ipcRenderer.on('import-library-update', (event, response) => {
-        this.$store.dispatch('addTrack', response)
+        this.$store.dispatch('addTrack', {
+          title: response['Name'],
+          artist: response['Artist'],
+          album: response['Album'],
+          length: response['Total Time'],
+          trackNumber: response['Track Number'],
+          src: {
+            file: response['Location']
+          },
+          meta: {
+            itunes: response
+          }
+        })
         this.tracksAdded += 1
       })
       ipcRenderer.once('import-library-complete', (event, response) => {
@@ -103,7 +122,7 @@ export default {
   render (h) {
     return (
       <v-layout column justify-center align-center class='settings'>
-        {this.detecting ? this.detectingButton : this.openButton }
+        {this.complete ? this.completedButton : (this.detecting ? this.detectingButton : this.openButton) }
         <p class='subheading grey--text text--darken-1'>{this.status}</p>
       </v-layout>
     )

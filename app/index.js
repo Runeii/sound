@@ -21,7 +21,15 @@ if (isDev) {
 
 function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600, titleBarStyle: 'hidden'})
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 640,
+    title: 'A Sound Player',
+    titleBarStyle: 'hidden', 
+    webPreferences: {
+      webSecurity: false
+    }
+  })
 
   // and load the index.html of the app.
   const url = isDev ? `http://${config.devServer.host}:${config.devServer.port}` : `file://${__dirname}/dist/index.html`
