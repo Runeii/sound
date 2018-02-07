@@ -2,9 +2,9 @@ const fs = require('fs')
 const S3FS = require('s3fs')
 
 const s3Options = {
-  accessKeyId: 'AKIAJBMCYVD7S7X34P7Q',
-  secretAccessKey: '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',
-  region: 'eu-west-2'
+  accessKeyId: process.env.S3_KEY,
+  secretAccessKey: process.env.S3_SECRET,
+  region: process.env.S3_REGION
 }
 const fsImpl = new S3FS('sheffieldsound', s3Options)
 
