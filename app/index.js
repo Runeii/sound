@@ -79,7 +79,6 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 electron.ipcMain.on('open-dialog', (event, params) => {
-  console.log(params)
   electron.dialog.showOpenDialog(params, result => {
     event.sender.send('open-dialog-reply', result)
   })
@@ -98,6 +97,24 @@ electron.ipcMain.on('import-library', (event, libraryPath) => {
       child.disconnect()
     } else if (type === 'end') {
       event.sender.send('import-library-complete', true)
+      child.disconnect()
+    }
+  })
+})
+
+electron.ipcMain.on('upload-library', (event, library) => {
+  const program = path.resolve('./app/scripts/uploadLibrary.js')
+  const child = fork(program, [], { stdio: ['ipc'] })
+  console.log('Starting')
+  child.send(library)
+  child.on('message', ({ type, data }) => {
+    console.log(type + ' message received: ', data)
+    if (type === 'progress') {
+      event.sender.send('upload-library-update', data)
+    } else if (type === 'error') {
+      child.disconnect()
+    } else if (type === 'end') {
+      event.sender.send('upload-library-complete', true)
       child.disconnect()
     }
   })

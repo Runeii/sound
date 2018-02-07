@@ -10,8 +10,11 @@ const state = {
 }
 
 const getters = {
-  getTrackFromLibrary: (state) => (id) => {
-    return state.library.records.find((track) => { return track['_id'] === id })
+  library: (state) => {
+    return state.library.tracks || false
+  },
+  getTrackFromLibrary: (state, getters) => (id) => {
+    return getters.library.find((track) => { return track['_id'] === id }) || false
   },
   currentTrack: (state, getters) => {
     const currentTrack = getters.getTrackFromLibrary(state.currentTrackId)

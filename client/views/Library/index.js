@@ -1,12 +1,12 @@
+import { mapGetters } from 'vuex'
+
 export default {
   data () {
     return {
     }
   },
   computed: {
-    library () {
-      return this.$store.state.library.records || []
-    },
+    ...mapGetters(['library']),
     headers () {
       return [
         { text: 'Title', value: 'title', align: 'left'},
@@ -17,9 +17,6 @@ export default {
     }
   },
   methods: {
-    updateLibrary () {
-      this.$store.dispatch('getTracks')
-    },
     displayTrackOptionsMenu (id) {
       const response = confirm('Add track to queue?') // eslint-disable-line
       if (response === true) {

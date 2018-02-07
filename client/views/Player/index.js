@@ -16,14 +16,17 @@ export default {
   },
   computed: {
     source () {
-      return this.track.src.file
+      if (this.$store.state.library.cloud) {
+
+      } else {
+        return this.track.src.file
+      }
     },
     track () {
       return this.$store.getters.currentTrack
     }
   },
   created () {
-    this.$store.dispatch('getTracks')
     this.audioObject = document.createElement('audio')
     this.audioObject.addEventListener('timeupdate', this._handlePlayingUI)
     this.audioObject.addEventListener('loadeddata', this._handleLoaded)

@@ -7,6 +7,9 @@ export default {
       drawer: false
     }
   },
+  created () {
+    this.$store.dispatch('setupCloudRefs')
+  },
   computed: {
     ...mapGetters(['currentTrack']),
     sidebar () {
@@ -40,7 +43,7 @@ export default {
           </v-list>
           <v-list subheader>
             <v-subheader>Settings</v-subheader>
-            <v-list-tile avatar>
+            <v-list-tile avatar on-click={this.$router.push({name: 'Sync'})}>
               <v-list-tile-action>
                 <v-icon>import_export</v-icon>
               </v-list-tile-action>
@@ -62,11 +65,6 @@ export default {
         </v-navigation-drawer>
       )
     }
-  },
-  methods: {
-  },
-  mounted () {
-    this.$store.dispatch('getTracks')
   },
   render (h) {
     return (
