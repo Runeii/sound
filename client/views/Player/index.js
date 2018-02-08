@@ -16,11 +16,7 @@ export default {
   },
   computed: {
     source () {
-      if (this.$store.state.library.cloud) {
-
-      } else {
-        return this.track.src.file
-      }
+      return this.track.src.file
     },
     track () {
       return this.$store.getters.currentTrack
@@ -79,9 +75,9 @@ export default {
           <button onClick={this.testUpdate}>Update artwork</button>
         </div>
         <div class='player__details'>
-          <span class='player__details-title'>{this.track.title}</span>
-          <span class='player__details-artist'>{this.track.artist}</span>
-          {this.track.album ? <span class='player__details-album'>{this.track.album}</span> : false }
+          <span class='player__details-title'>{this.track.name}</span>
+          <span class='player__details-artist'>{this.track.artist.name}</span>
+          {this.track.album ? <span class='player__details-album'>{this.track.album.name}</span> : false }
         </div>
         <div class='player__progress'>
           <div class='player__progress-bar' onClick={this._jumpToTime}>

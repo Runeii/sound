@@ -32,7 +32,11 @@ const state = {
 const getters = {
   tracks: state => state.tracks,
   artists: state => state.artists,
-  albums: state => state.albums
+  albums: state => state.albums,
+  recordExists: (state) => (type, name) => {
+    const filtered = state[type].filter(record => record.name === name)
+    return (filtered.length > 0) ? filtered : false
+  }
 }
 
 const mutations = {
@@ -48,8 +52,23 @@ const actions = {
     bindFirebaseRef('albums', db.albums)
     bindFirebaseRef('artists', db.artists)
   }),
-  addTrack ({ commit }, data) {
-    db.tracks.add({...data, created: firebase.firestore.FieldValue.serverTimestamp()})
+  async addToDatabase ({ commit, dispatch, getters }, data) {
+    const artist = await dispatch('addArtist', {name: data.artist})
+    const album = await dispatch('addAlbum', {name: data.album})
+    dispatch('addTrack', {...data, artist: artist, album: album})
+  },
+  async addArtist ({ commit, dispatch, getters }, {name}) {
+    const artistDoc = db.artists.doc(name)
+    artistDoc.update({name: name, timestamp: firebase.firestore.FieldValue.serverTimestamp()})
+    return artistDoc
+  },
+  async addAlbum ({ commit, dispatch }, {name}) {
+    const albumDoc = db.albums.doc(name)
+    albumDoc.update({name: name, timestamp: firebase.firestore.FieldValue.serverTimestamp()})
+    return albumDoc
+  },
+  async addTrack ({ commit, dispatch }, data) {
+    db.tracks.doc(data.name).set({...data, created: firebase.firestore.FieldValue.serverTimestamp()}, {merge: true}).then(response => {console.log(response)})
   },
   toggleCloudLibrary ({ commit }, boolean) {
     commit('TOGGLE_CLOUD_LIBRARY', boolean)

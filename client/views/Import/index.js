@@ -98,8 +98,8 @@ export default {
       this.activity = true
       ipcRenderer.send('import-library', this.itunesPath)
       ipcRenderer.on('import-library-update', (event, response) => {
-        this.$store.dispatch('addTrack', {
-          title: response['Name'],
+        this.$store.dispatch('addToDatabase', {
+          name: response['Name'],
           artist: response['Artist'],
           album: response['Album'],
           length: response['Total Time'],

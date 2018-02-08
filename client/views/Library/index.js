@@ -33,10 +33,10 @@ export default {
     trackRow (track) {
       return (
         <tr onClick={() => this.playTrack(track._id)}>
-          <td>{track.title}</td>
+          <td>{track.name}</td>
           <td>{track.length}</td>
-          <td>{track.artist}</td>
-          <td>{track.album}</td>
+          <td>{track.artist.name}</td>
+          <td>{track.album.name}</td>
           <td>
             <v-icon onClick={() => this.displayTrackOptionsMenu(track._id)}>more_horiz</v-icon>
           </td>
