@@ -61,6 +61,13 @@ const base = {
       {
         test: /\.svg$/,
         loader: 'raw-loader'
+      },
+      {
+        test: /worker\.js$/,
+        use: [
+          { loader: 'worker-loader' },
+          { loader: 'babel-loader' }
+        ]
       }
     ]
   },

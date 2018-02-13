@@ -96,16 +96,7 @@ export default {
     },
     importLibrary () {
       this.activity = true
-      ipcRenderer.send('import-library', this.itunesPath)
-      ipcRenderer.on('import-library-update', (event, response) => {
-        console.log('Should have added one')
-        // this.$store.dispatch('addToDatabase', response)
-        this.tracksAdded += 1
-      })
-      ipcRenderer.once('import-library-complete', (event, response) => {
-        this.complete = true
-        this.activity = false
-      })
+      this.$store.dispatch('importItunesLibraryFile', this.itunesPath)
     }
   },
   render (h) {

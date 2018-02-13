@@ -28,7 +28,7 @@ export default {
     source () {
       if (this.deviceID && this.track.src[this.deviceID]) {
         return this.track.src[this.deviceID]
-      } else /* if (this.track.src.synced) */ {
+      } else if (this.track.src.synced) {
         return this.$s3.getSignedUrl('getObject', { Bucket: 'sheffieldsound', Key: this.track.uuid, Expires: 60 * 60 })
       }
       return false
@@ -73,7 +73,7 @@ export default {
           album: this.track.album.name
         });
         navigator.mediaSession.setActionHandler('play', this.play);
-        navigator.mediaSession.setActionHandler('pause',this.pause);
+        navigator.mediaSession.setActionHandler('pause', this.pause);
         navigator.mediaSession.setActionHandler('seekbackward', function() {});
         navigator.mediaSession.setActionHandler('seekforward', function() {});
         navigator.mediaSession.setActionHandler('previoustrack', function() {});

@@ -58,7 +58,6 @@ const actions = {
     commit('UPDATE_TRACK_DATA', payload)
   },
   async getDeviceID ({ commit }) {
-    console.log(deviceId)
     const id = await deviceId()
     commit('SET_DEVICE_ID', id)
     return id

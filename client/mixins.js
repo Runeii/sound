@@ -8,7 +8,6 @@ AWS.config = {
 }
 module.exports = {
   install (vue) {
-    console.log(AWS.config)
     vue.prototype.$s3 = new AWS.S3()
   }
 }
