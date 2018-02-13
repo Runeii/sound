@@ -1,9 +1,9 @@
+import { mapState, mapGetters } from 'vuex'
 import './player.scss'
 
 export default {
   data () {
     return {
-      audioObject: false,
       timings: {
         progressStyle: '',
         currentTime: '0:00',
@@ -15,15 +15,33 @@ export default {
     }
   },
   computed: {
+    ...mapState(['theTrack']),
+    ...mapGetters(['deviceID']),
+    audioObject: {
+      get: function () {
+        return this.theTrack
+      },
+      set: function (newValue) {
+        this.$store.commit('THE_TRACK_SETTER', newValue)
+      }
+    },
     source () {
-      return this.track.src.file
+      if (this.deviceID && this.track.src[this.deviceID]) {
+        return this.track.src[this.deviceID]
+      } else /* if (this.track.src.synced) */ {
+        return this.$s3.getSignedUrl('getObject', { Bucket: 'sheffieldsound', Key: this.track.uuid, Expires: 60 * 60 })
+      }
+      return false
     },
     track () {
       return this.$store.getters.currentTrack
     }
   },
   created () {
-    this.audioObject = document.createElement('audio')
+    if (this.audioObject.src) {
+      this._handleLoaded()
+      this._handlePlayingUI()
+    }
     this.audioObject.addEventListener('timeupdate', this._handlePlayingUI)
     this.audioObject.addEventListener('loadeddata', this._handleLoaded)
   },
@@ -46,12 +64,28 @@ export default {
       const timing = (this.audioObject.duration / 100) * offset
       this.audioObject.currentTime = timing
     },
-    play () {
-      if (this.audioObject.src !== this.source) {
+    _onPlay () {
+      // On Android, customise media playback notification
+      if (navigator && 'mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: this.track.name,
+          artist: this.track.artist.name,
+          album: this.track.album.name
+        });
+        navigator.mediaSession.setActionHandler('play', this.play);
+        navigator.mediaSession.setActionHandler('pause',this.pause);
+        navigator.mediaSession.setActionHandler('seekbackward', function() {});
+        navigator.mediaSession.setActionHandler('seekforward', function() {});
+        navigator.mediaSession.setActionHandler('previoustrack', function() {});
+        navigator.mediaSession.setActionHandler('nexttrack', function() {});
+      }      
+    },
+    async play () {
+      if (this.source && this.audioObject.src !== this.source) {
         this.audioObject.src = this.source
       }
-      console.log(this.audioObject)
       this.audioObject.play()
+      this._onPlay()
     },
     pause () {
       this.audioObject.pause()

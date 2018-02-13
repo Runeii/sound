@@ -5,8 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const config = require('./config')
 const _ = require('./utils')
+const Dotenv = require('dotenv-webpack');
 
-module.exports = {
+const base = {
   entry: {
     client: './client/index.js'
   },
@@ -43,7 +44,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        loaders: ['babel-loader'],
+        loaders: ['babel-loader', 'webpack-conditional-loader'],
         exclude: [/node_modules/]
       },
       {
@@ -66,7 +67,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: config.title,
-      template: path.resolve(__dirname, 'index.html'),
+      template: _.inputIndexPath,
       filename: _.outputIndexPath
     }),
     new webpack.LoaderOptionsPlugin(_.loadersOptions()),
@@ -76,7 +77,12 @@ module.exports = {
         // to the root of dist path
         to: './'
       }
-    ])
+    ]),
+    new Dotenv({
+      path: './.env',
+    })
   ],
   target: _.target
 }
+
+module.exports = base

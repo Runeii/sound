@@ -7,11 +7,26 @@ export default {
     return {
       activity: false,
       complete: false,
-      progress: 0
+      progress: 0,
+      total: false,
+      attempted: false
     }
   },
+  created () {
+    ipcRenderer.send('ping')
+    ipcRenderer.on('pong', (event, response) => {
+      if (response && response.state === 'uploading') {
+        this.total = response.total
+        this.progress = response.progress
+        this.fieldProgressMessages()
+      }
+    })
+  },
   computed: {
-    ...mapGetters(['library']),
+    ...mapGetters(['library', 'uploadQueue']),
+    queueSize () {
+      return this.uploadQueue.length
+    },
     completedButton () {
       return (
         <v-btn>
@@ -31,9 +46,13 @@ export default {
   methods: {
     uploadLibrary () {
       this.activity = true
+      this.total = this.queueSize
       ipcRenderer.send('upload-library', this.library)
+      this.fieldProgressMessages()
+    },
+    fieldProgressMessages () {
       ipcRenderer.on('upload-library-update', (event, response) => {
-        this.progress = response
+        this.progress++
       })
       ipcRenderer.once('upload-library-complete', (event, response) => {
         this.complete = true
@@ -46,7 +65,7 @@ export default {
     return (
       <v-layout column justify-center align-center class='settings'>
         { !this.complete ? this.openButton : this.completedButton }
-        <p class='subheading grey--text text--darken-1'>{this.progress}</p>
+        <p class='subheading grey--text text--darken-1'>{this.total ? this.progress + '/' + this.total : this.queueSize } tracks</p>
       </v-layout>
     )
   }

@@ -1,5 +1,5 @@
 import fileExists from 'file-exists'
-const {remote, ipcRenderer} = require('electron')
+const { remote, ipcRenderer } = require('electron')
 
 export default {
   data () {
@@ -39,14 +39,14 @@ export default {
     openButton () {
       if (this.detected) {
         return (
-          <v-btn loading={this.activity} on-click={this.importLibrary()} disabled={this.activity} color="success" class="white--text">
+          <v-btn loading={this.activity} on-click={this.importLibrary()} disabled={this.activity} color='success' class='white--text'>
             Start import
             <v-icon right dark>cloud_upload</v-icon>
           </v-btn>
         )
       } else {
         return (
-          <v-btn loading={this.activity} on-click={this.openLibrary()} disabled={this.activity} color="blue-grey" class="white--text">
+          <v-btn loading={this.activity} on-click={this.openLibrary()} disabled={this.activity} color='blue-grey' class='white--text'>
             Locate iTunes library
             <v-icon right dark>open_in_browser</v-icon>
           </v-btn>
@@ -98,19 +98,8 @@ export default {
       this.activity = true
       ipcRenderer.send('import-library', this.itunesPath)
       ipcRenderer.on('import-library-update', (event, response) => {
-        this.$store.dispatch('addToDatabase', {
-          name: response['Name'],
-          artist: response['Artist'],
-          album: response['Album'],
-          length: response['Total Time'],
-          trackNumber: response['Track Number'],
-          src: {
-            file: response['Location']
-          },
-          meta: {
-            itunes: response
-          }
-        })
+        console.log('Should have added one')
+        // this.$store.dispatch('addToDatabase', response)
         this.tracksAdded += 1
       })
       ipcRenderer.once('import-library-complete', (event, response) => {

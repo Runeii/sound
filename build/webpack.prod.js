@@ -5,19 +5,20 @@ const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ProgressPlugin = require('webpack/lib/ProgressPlugin')
 const OfflinePlugin = require('offline-plugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const rm = require('rimraf')
 const base = require('./webpack.base')
 const pkg = require('../package')
 const _ = require('./utils')
 const config = require('./config')
 
-if (config.electron) {
-  // remove files in dist folder in electron mode
+if (config.platform === 'electron') {
   rm.sync('app/assets/*')
+} else if (config.platform === 'mobile') {
+  rm.sync('www/*')
+  base.devtool = 'source-map'
 } else {
-  // remove dist folder in web app mode
   rm.sync('dist/*')
-  // use source-map in web app mode
   base.devtool = 'source-map'
 }
 
@@ -30,14 +31,9 @@ base.plugins.push(
   new webpack.DefinePlugin({
     'process.env.NODE_ENV': JSON.stringify('production')
   }),
-  new webpack.optimize.UglifyJsPlugin({
-    //sourceMap: true,
-    compress: {
-      warnings: false
-    },
-    output: {
-      comments: false
-    }
+  new UglifyJsPlugin({
+    sourceMap: true,
+    uglifyOptions: { ecma: 8 }
   }),
   // extract vendor chunks
   new webpack.optimize.CommonsChunkPlugin({

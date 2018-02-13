@@ -21,17 +21,22 @@ _.cssProcessors = [
   {loader: 'sass-loader?indentedSyntax', options: { sourceMap: true }, test: /\.sass$/},
 ]
 
-_.outputPath = config.electron ?
-  path.join(__dirname, '../app/dist') :
-  path.join(__dirname, '../dist')
-
-_.outputIndexPath = config.electron ?
-  path.join(__dirname, '../app/dist/index.html') :
-  path.join(__dirname, '../dist/index.html')
-
-_.target = config.electron ?
-  'electron-renderer' :
-  'web'
+if (config.platform === 'electron') {
+  _.outputPath = path.join(__dirname, '../app/dist')
+  _.inputIndexPath = path.resolve(__dirname, 'index.html')
+  _.outputIndexPath = path.join(__dirname, '../app/dist/index.html')
+  _.target = 'electron-renderer'
+} else if (config.platform === 'mobile') {
+  _.outputPath = path.join(__dirname, '../www')
+  _.inputIndexPath = path.resolve(__dirname, 'index-cordova.html')
+  _.outputIndexPath = path.join(__dirname, '../www/index.html')
+  _.target = 'web'
+} else {
+  _.outputPath = path.join(__dirname, '../dist')
+  _.inputIndexPath = path.resolve(__dirname, 'index.html')
+  _.outputIndexPath = path.join(__dirname, '../dist/index.html')
+  _.target = 'web'
+}
 
 // https://github.com/egoist/vbuild/blob/master/lib/vue-loaders.js
 _.loadersOptions = () => {

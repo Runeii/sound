@@ -2,8 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Player from '../views/Player'
 import Library from '../views/Library'
-import Import from '../views/Import'
+
+// #if process.env.TARGET_ENV !== 'electron'
+import Sync from '../views/dummy.js'
+import Import from '../views/dummy.js'
+// #endif
+// #if process.env.TARGET_ENV === 'electron'
 import Sync from '../views/Sync'
+import Import from '../views/Import'
+// #endif
 
 Vue.use(Router)
 
