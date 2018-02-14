@@ -5,6 +5,7 @@ export default {
     return {
       activity: false,
       complete: false,
+      failed: false,
       progress: 0,
       total: false,
       attempted: false
@@ -15,6 +16,14 @@ export default {
     queueSize () {
       return this.uploadQueue.length
     },
+    openButton () {
+      return (
+        <v-btn loading={this.activity} on-click={() => this.uploadLibrary()} disabled={this.activity} color="success" class="white--text">
+          { !this.activity ? 'Start upload' : 'Uploading...' }
+          <v-icon right dark>cloud_upload</v-icon>
+        </v-btn>
+      )
+    },
     completedButton () {
       return (
         <v-btn>
@@ -22,11 +31,10 @@ export default {
         </v-btn>
       )
     },
-    openButton () {
+    failedButton () {
       return (
-        <v-btn loading={this.activity} on-click={this.uploadLibrary()} disabled={this.activity} color="success" class="white--text">
-          { !this.activity ? 'Start upload' : 'Uploading...' }
-          <v-icon right dark>cloud_upload</v-icon>
+        <v-btn>
+        Failed
         </v-btn>
       )
     }
@@ -51,26 +59,27 @@ export default {
       this.$store.dispatch('uploadLibraryFiles').then(s => this.fieldProgressMessages())
     },
     fieldProgressMessages () {
-      this.uploadWorker.onmessage = (e) => {
+      this.uploadWorker.addEventListener('message', (e) => {
         const { type } = e.data
         if (type === 'success') {
-          console.log('UPDATE IN component')
           this.progress++
         } else if (type === 'error') {
           this.activity = false
+          this.failed = true
         } else if (type === 'end') {
-          this.complete = true
-          this.$store.dispatch('toggleCloudLibrary', true)
           this.activity = false
+          this.completed = true
+          this.$store.dispatch('toggleCloudLibrary', true)
         }
-      }
+      })
     }
-
   },
   render (h) {
     return (
       <v-layout column justify-center align-center class='settings'>
-        { !this.complete ? this.openButton : this.completedButton }
+        { !this.complete && !this.failed ? this.openButton : false }
+        { this.complete ? this.completedButton : false }
+        { this.failed ? this.failedButton : false }
         <p class='subheading grey--text text--darken-1'>{this.total ? this.progress + '/' + this.total : this.queueSize } tracks</p>
       </v-layout>
     )

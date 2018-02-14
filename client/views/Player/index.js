@@ -1,4 +1,4 @@
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import './player.scss'
 
 export default {
@@ -25,11 +25,11 @@ export default {
         this.$store.commit('THE_TRACK_SETTER', newValue)
       }
     },
-    source () {
-      if (this.deviceId && this.track.src[this.deviceId]) {
+    async source () {
+      if (this.deviceId && this.track.src[this.deviceID]) {
         return this.track.src[this.deviceId]
-      } else if (this.track.src.synced) {
-        return this.$s3.getSignedUrl('getObject', { Bucket: 'sheffieldsound', Key: this.track.uuid, Expires: 60 * 60 })
+      } else if (this.track.src.cloud) {
+        return await this.getTrackCloudSrc(this.track.uuid)
       }
       return false
     },
@@ -46,6 +46,7 @@ export default {
     this.audioObject.addEventListener('loadeddata', this._handleLoaded)
   },
   methods: {
+    ...mapActions(['getTrackCloudSrc']),
     _handlePlayingUI () {
       const currentTime = parseInt(this.audioObject.currentTime)
       const currentTimeAsPercentage = ((currentTime / this.timings.totalDuration.raw) * 100).toFixed(1)
@@ -82,7 +83,7 @@ export default {
     },
     async play () {
       if (this.source && this.audioObject.src !== this.source) {
-        this.audioObject.src = this.source
+        this.audioObject.src = await this.source
       }
       this.audioObject.play()
       this._onPlay()

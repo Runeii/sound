@@ -4,18 +4,22 @@ import { firebaseAction, firebaseMutations } from 'vuexfire'
 const uuid = require('uuid/v1')
 import firebase from 'firebase/app'
 require('firebase/firestore')
+require('firebase/storage')
 require('dotenv').config()
 import ImportWorker from '../workers/importLibrary.worker.js'
 import UploadWorker from '../workers/uploadLibrary.worker.js'
 
-const firebasedb = firebase.initializeApp({
+const fb = firebase.initializeApp({
   apiKey: process.env.FIREBASE_KEY,
   authDomain: process.env.FIREBASE_DOMAIN,
   databaseURL: process.env.FIREBASE_URL,
   projectId: process.env.FIREBASE_ID,
   storageBucket: process.env.FIREBASE_BUCKET,
   messagingSenderId: process.env.FIREBASE_SENDER
-}).firestore()
+})
+
+const firebasedb = fb.firestore()
+const storageRef = fb.storage()
 
 const db = {
   tracks: firebasedb.collection('tracks'),
@@ -29,7 +33,7 @@ const state = {
   tracks: [],
   artists: [],
   albums: [],
-  cloud: true,
+  cloud: false,
   uploadWorker: false
 }
 
@@ -68,7 +72,7 @@ const actions = {
   importItunesLibraryFile ({ commit }, path) {
     const child = new ImportWorker()
     child.postMessage(path)
-    child.onmessage = (e) => {
+    child.addEventListener('message', (e) => {
       const { type, data } = e.data
       if (type === 'update') {
         console.log('UPDATE', data)
@@ -77,31 +81,34 @@ const actions = {
       } else if (type === 'end') {
         console.log('END', data)
       }
-    }
+    })
   },
   toggleCloudLibrary ({ commit }, boolean) {
     commit('TOGGLE_CLOUD_LIBRARY', boolean)
   },
-  uploadLibraryFiles ({ dispatch, commit, getters}) {
+  uploadLibraryFiles ({ dispatch, commit, getters }) {
     const child = new UploadWorker()
     commit('STORE_UPLOAD_WORKER', child)
     child.postMessage(getters.uploadQueue)
-    child.onmessage = (e) => {
-      console.log('Received a message')
+    child.addEventListener('message', (e) => {
       const { type, data } = e.data
       if (type === 'success') {
         dispatch('updateTrack', data)
-        console.log('UPDATE IN VUex', data)
+      } else if (type === 'message') {
+        console.log(data)
       } else if (type === 'error') {
         console.log('ERROR', data)
       } else if (type === 'end') {
         console.log('END')
       }
-    }
+    })
     return true
   },
-  updateTrack ({ commit }, ) {
-
+  updateTrack ({ commit }, track) {
+    db.tracks.doc(escape(track.name)).update({ 'src.cloud': true })
+  },
+  async getTrackCloudSrc ({ commit }, uuid) {
+    return await storageRef.ref(uuid).getDownloadURL()
   }
 }
 

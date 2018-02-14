@@ -37,10 +37,6 @@ const mutations = {
   },
   QUEUE_TRACK (state, uuid) {
     state.queuedTracks.push(uuid)
-  },
-  UPDATE_TRACK_DATA (state, [uuid, data]) {
-    const target = state.library.findIndex((trackRecord) => { return trackRecord.uuid === uuid })
-    Vue.set(state.library, target, { ...state.library[target], ...data })
   }
 }
 
@@ -50,9 +46,6 @@ const actions = {
   },
   queueTrack ({ commit, getters }, uuid) {
     commit('QUEUE_TRACK', uuid)
-  },
-  updateTrack ({ commit }, payload) {
-    commit('UPDATE_TRACK_DATA', payload)
   }
 }
 
