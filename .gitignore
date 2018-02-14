@@ -4,3 +4,4 @@ node_modules
 /app/index.html
 /app/assets
 .env
+/dist

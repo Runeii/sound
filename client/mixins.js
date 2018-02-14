@@ -1,4 +1,4 @@
-var AWS = require('aws-sdk')
+import AWS from 'aws-sdk/clients/s3'
 
 AWS.config = {
   accessKeyId: process.env.S3_GET_KEY,

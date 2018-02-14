@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { firebaseAction, firebaseMutations } from 'vuexfire'
 const uuid = require('uuid/v1')
-const firebase = require('firebase')
+import firebase from 'firebase/app'
 require('firebase/firestore')
 require('dotenv').config()
 import ImportWorker from '../workers/importLibrary.worker.js'

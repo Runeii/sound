@@ -1,7 +1,7 @@
 const getItunesTracks = require('@johnpaulvaughan/itunes-music-library-tracks').getItunesTracks
 const { machineIdSync } = require('node-machine-id')
-import firebase from 'firebase'
-require('@firebase/firestore')
+import firebase from 'firebase/app'
+require('firebase/firestore')
 const uuid = require('uuid/v1')
 
 const firebasedb = firebase.initializeApp({
