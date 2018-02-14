@@ -2,21 +2,20 @@
 import { machineIdSync } from 'node-machine-id'
 // #endif
 
-const deviceId = async function deviceID () {
-  // #if process.env.TARGET_ENV !== 'mobile'
-  // #if process.env.TARGET_ENV !== 'electron'
-  return () => { return 'browser' }
-  // #endif
-  // #endif
+const deviceId = () => {
+  if (process.env.TARGET_ENV) {
+    // #if process.env.TARGET_ENV !== 'mobile'
+    // #if process.env.TARGET_ENV !== 'electron'
+    return 'browser'
+    // #endif
+    // #endif
 
-  // #if process.env.TARGET_ENV === 'mobile'
-  return () => { return device.uuid }
-  // #endif
-  
-  // #if process.env.TARGET_ENV !== 'electron'
-  return 'test'
-  return machineIdSync()
-  // #endif
+    // #if process.env.TARGET_ENV === 'mobile'
+    return device.uuid
+    // #endif
+  } else {
+    return machineIdSync()
+  }
 }
 
 export { deviceId }

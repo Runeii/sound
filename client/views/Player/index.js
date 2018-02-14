@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     ...mapState(['theTrack']),
-    ...mapGetters(['deviceID']),
+    ...mapGetters(['deviceId']),
     audioObject: {
       get: function () {
         return this.theTrack
@@ -26,8 +26,8 @@ export default {
       }
     },
     source () {
-      if (this.deviceID && this.track.src[this.deviceID]) {
-        return this.track.src[this.deviceID]
+      if (this.deviceId && this.track.src[this.deviceId]) {
+        return this.track.src[this.deviceId]
       } else if (this.track.src.synced) {
         return this.$s3.getSignedUrl('getObject', { Bucket: 'sheffieldsound', Key: this.track.uuid, Expires: 60 * 60 })
       }

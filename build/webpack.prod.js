@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const ProgressPlugin = require('webpack/lib/ProgressPlugin')
 const OfflinePlugin = require('offline-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const rm = require('rimraf')
 const base = require('./webpack.base')
 const pkg = require('../package')
@@ -57,7 +58,8 @@ base.plugins.push(
       events:true,
       FALLBACK:{ '/':'/' }
     }
-  })
+  }),
+  new BundleAnalyzerPlugin()
 )
 
 // extract css in standalone css files

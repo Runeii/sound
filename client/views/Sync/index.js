@@ -1,6 +1,4 @@
 import { mapGetters } from 'vuex'
-import fileExists from 'file-exists'
-const { ipcRenderer } = require('electron')
 
 export default {
   data () {
@@ -12,18 +10,8 @@ export default {
       attempted: false
     }
   },
-  created () {
-    ipcRenderer.send('ping')
-    ipcRenderer.on('pong', (event, response) => {
-      if (response && response.state === 'uploading') {
-        this.total = response.total
-        this.progress = response.progress
-        this.fieldProgressMessages()
-      }
-    })
-  },
   computed: {
-    ...mapGetters(['library', 'uploadQueue']),
+    ...mapGetters(['uploadWorker', 'library', 'uploadQueue']),
     queueSize () {
       return this.uploadQueue.length
     },
@@ -43,23 +31,41 @@ export default {
       )
     }
   },
+  created () {
+    if (this.uploadWorker) {
+      this.uploadWorker.postMessage('getStatus')
+      this.uploadWorker.onmessage = (e) => {
+        const { type, data } = e.data
+        if (type === 'status') {
+          this.total = data.total
+          this.progress = data.progress
+          this.fieldProgressMessages()
+        }
+      }
+    }
+  },
   methods: {
     uploadLibrary () {
       this.activity = true
       this.total = this.queueSize
-      ipcRenderer.send('upload-library', this.library)
-      this.fieldProgressMessages()
+      this.$store.dispatch('uploadLibraryFiles').then(s => this.fieldProgressMessages())
     },
     fieldProgressMessages () {
-      ipcRenderer.on('upload-library-update', (event, response) => {
-        this.progress++
-      })
-      ipcRenderer.once('upload-library-complete', (event, response) => {
-        this.complete = true
-        this.$store.dispatch('toggleCloudLibrary', true)
-        this.activity = false
-      })
+      this.uploadWorker.onmessage = (e) => {
+        const { type } = e.data
+        if (type === 'success') {
+          console.log('UPDATE IN component')
+          this.progress++
+        } else if (type === 'error') {
+          this.activity = false
+        } else if (type === 'end') {
+          this.complete = true
+          this.$store.dispatch('toggleCloudLibrary', true)
+          this.activity = false
+        }
+      }
     }
+
   },
   render (h) {
     return (

@@ -11,25 +11,24 @@ const s3Options = {
 }
 const fsImpl = new S3FS('sheffieldsound', s3Options)
 
-process.on('message', (queue) => {
+onmessage = (e) => {
+  const queue = e.data
   const startProcessASynchronously = async () => {
     await asyncForEach(queue, async (track) => {
       const path = decodeURI(track.src[machineId].replace(/^(file:\/\/)/, ''))
-      process.send({ type: 'message', data: path })
+      postMessage({ type: 'success', data: track })
+      /*
       await copyFile(path, track.uuid).then(success => {
-        process.send({ type: 'progress', data: 1 })
-        process.send({ type: 'message', data: 'Uploaded ' + track })
+        postMessage({ type: 'success', data: track })
       }).catch(err => {
-        process.send({ type: 'error', data: err })
-        console.log(err)
+        postMessage({ type: 'error', data: err })
         Promise.reject()
-      })
+      }) */
     })
-    process.send({ type: 'end' })
-    console.log('End')
+    postMessage({ type: 'end' })
   }
   startProcessASynchronously()
-})
+}
 
 async function asyncForEach (array, callback) {
   for (let index = 0; index < array.length; index++) {

@@ -8,8 +8,6 @@ export default {
     }
   },
   created () {
-    console.log('Yo')
-    this.$store.dispatch('getDeviceID')
     this.$store.dispatch('setupCloudRefs')
   },
   computed: {

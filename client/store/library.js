@@ -6,6 +6,7 @@ const firebase = require('firebase')
 require('firebase/firestore')
 require('dotenv').config()
 import ImportWorker from '../workers/importLibrary.worker.js'
+import UploadWorker from '../workers/uploadLibrary.worker.js'
 
 const firebasedb = firebase.initializeApp({
   apiKey: process.env.FIREBASE_KEY,
@@ -28,7 +29,8 @@ const state = {
   tracks: [],
   artists: [],
   albums: [],
-  cloud: true
+  cloud: true,
+  uploadWorker: false
 }
 
 const getters = {
@@ -41,6 +43,9 @@ const getters = {
   },
   uploadQueue: state => {
     return state.tracks.filter(record => record.src.cloud !== true)
+  },
+  uploadWorker: state => { 
+    return state.uploadWorker
   }
 }
 
@@ -48,6 +53,9 @@ const mutations = {
   ...firebaseMutations,
   TOGGLE_CLOUD_LIBRARY (state, boolean) {
     state.cloud = boolean
+  },
+  STORE_UPLOAD_WORKER (state, worker) {
+    state.uploadWorker = worker
   }
 }
 
@@ -73,6 +81,27 @@ const actions = {
   },
   toggleCloudLibrary ({ commit }, boolean) {
     commit('TOGGLE_CLOUD_LIBRARY', boolean)
+  },
+  uploadLibraryFiles ({ dispatch, commit, getters}) {
+    const child = new UploadWorker()
+    commit('STORE_UPLOAD_WORKER', child)
+    child.postMessage(getters.uploadQueue)
+    child.onmessage = (e) => {
+      console.log('Received a message')
+      const { type, data } = e.data
+      if (type === 'success') {
+        dispatch('updateTrack', data)
+        console.log('UPDATE IN VUex', data)
+      } else if (type === 'error') {
+        console.log('ERROR', data)
+      } else if (type === 'end') {
+        console.log('END')
+      }
+    }
+    return true
+  },
+  updateTrack ({ commit }, ) {
+
   }
 }
 

@@ -6,8 +6,8 @@ import { deviceId } from '../cross-platform.js'
 Vue.use(Vuex)
 
 const state = {
+  deviceId: deviceId,
   theTrack: new Audio(),
-  deviceID: '',
   currentTrackId: 2,
   queuedTracks: []
 }
@@ -23,8 +23,8 @@ const getters = {
     const currentTrack = getters.getTrackFromLibrary(state.currentTrackId)
     return currentTrack || {}
   },
-  deviceID: (state) => {
-    return state.deviceID || false
+  deviceId: (state) => {
+    return state.deviceId()
   }
 }
 
@@ -41,9 +41,6 @@ const mutations = {
   UPDATE_TRACK_DATA (state, [uuid, data]) {
     const target = state.library.findIndex((trackRecord) => { return trackRecord.uuid === uuid })
     Vue.set(state.library, target, { ...state.library[target], ...data })
-  },
-  SET_DEVICE_ID (state, deviceId) {
-    state.deviceID = deviceId
   }
 }
 
@@ -56,11 +53,6 @@ const actions = {
   },
   updateTrack ({ commit }, payload) {
     commit('UPDATE_TRACK_DATA', payload)
-  },
-  async getDeviceID ({ commit }) {
-    const id = await deviceId()
-    commit('SET_DEVICE_ID', id)
-    return id
   }
 }
 
