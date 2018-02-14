@@ -5,9 +5,15 @@ const uuid = require('uuid/v1')
 import firebase from 'firebase/app'
 require('firebase/firestore')
 require('firebase/storage')
+// #if process.env.TARGET_ENV === 'mobile'
+import ImportWorker from '../workers/dummy.worker.js'
+import UploadWorker from '../workers/dummy.worker.js'
+// #endif
+// #if process.env.TARGET_ENV !== 'mobile'
 require('dotenv').config()
 import ImportWorker from '../workers/importLibrary.worker.js'
 import UploadWorker from '../workers/uploadLibrary.worker.js'
+// #endif
 
 const fb = firebase.initializeApp({
   apiKey: process.env.FIREBASE_KEY,
