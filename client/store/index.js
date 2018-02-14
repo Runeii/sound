@@ -21,7 +21,7 @@ const getters = {
   },
   currentTrack: (state, getters) => {
     const currentTrack = getters.getTrackFromLibrary(state.currentTrackId)
-    return currentTrack || {}
+    return currentTrack || { album: {}, artist: {} }
   },
   deviceId: (state) => {
     return state.deviceId()

@@ -1,4 +1,5 @@
-import AWS from 'aws-sdk/clients/s3'
+import AWS from 'aws-sdk/global'
+import S3 from 'aws-sdk/clients/s3'
 
 AWS.config = {
   accessKeyId: process.env.S3_GET_KEY,
@@ -8,6 +9,6 @@ AWS.config = {
 }
 module.exports = {
   install (vue) {
-    vue.prototype.$s3 = new AWS.S3()
+    vue.prototype.$s3 = new S3()
   }
 }
