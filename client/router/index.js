@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Player from '../views/Player'
 import Library from '../views/Library'
 
 // #if process.env.TARGET_ENV !== 'electron'
@@ -19,11 +18,6 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: Player,
-      name: 'Now Playing'
-    },
-    {
-      path: '/library',
       component: Library,
       name: 'Library'
     },

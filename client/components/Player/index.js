@@ -5,7 +5,7 @@ export default {
   data () {
     return {
       timings: {
-        progressStyle: '',
+        progress: 0,
         currentTime: '0:00',
         totalDuration: {
           raw: 0,
@@ -52,8 +52,7 @@ export default {
     ...mapActions(['getTrackCloudSrc']),
     _handlePlayingUI () {
       const currentTime = parseInt(this.audioObject.currentTime)
-      const currentTimeAsPercentage = ((currentTime / this.timings.totalDuration.raw) * 100).toFixed(1)
-      this.timings.progressStyle = `right:${100 - currentTimeAsPercentage}%;`
+      this.timings.progress = ((currentTime / this.timings.totalDuration.raw) * 100).toFixed(1)
       this.timings.currentTime = this.convertTimeHHMMSS(currentTime)
     },
     _handleLoaded () {
@@ -64,7 +63,8 @@ export default {
       }
     },
     _jumpToTime (click) {
-      const offset = (click.layerX / click.target.clientWidth) * 100
+      console.log(click)
+      const offset = (click.pageX / click.screenX) * 100
       const timing = (this.audioObject.duration / 100) * offset
       this.audioObject.currentTime = timing
     },
@@ -97,20 +97,23 @@ export default {
     stop () {
       this.audioObject.pause()
       this.audioObject.currentTime = 0
-    },
-    testUpdate () {
-      this.$store.dispatch('updateTrack', [1, { artwork: 'https://i.scdn.co/image/31ff32e07215e719fe738d209d586ffe629b8425' }])
     }
   },
   render (h) {
     return (
+      <v-bottom-nav fixed={true} shift value="true">
+        <v-progress-linear v-model={this.timings.progress} onClick={this._jumpToTime} />
+        <span class='player__details-title'>{this.track.name}</span>
+        <button class='player__controls-button player__controls-play' onClick={this.play}>Play</button>
+      </v-bottom-nav>
+    )
+    /*
       <div class='player__holder'>
         <img class='player__artwork' src={this.track.artwork} />
         <div class='player__controls'>
           <button class='player__controls-button player__controls-play' onClick={this.play}>Play</button>
           <button class='player__controls-button player__controls-pause' onClick={this.pause}>Pause</button>
           <button class='player__controls-button player__controls-stop' onClick={this.stop}>Stop</button>
-          <button onClick={this.testUpdate}>Update artwork</button>
         </div>
         <div class='player__details'>
           <span class='player__details-title'>{this.track.name}</span>
@@ -125,6 +128,6 @@ export default {
           <span class='player__progress-total'>{this.timings.totalDuration.pretty}</span>
         </div>
       </div>
-    )
+    ) */
   }
 }

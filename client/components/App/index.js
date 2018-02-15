@@ -1,5 +1,6 @@
 import './style.css'
 import Sidebar from '../Sidebar'
+import Player from '../Player'
 
 export default {
   data () {
@@ -25,6 +26,7 @@ export default {
             <router-view></router-view>
           </v-container>
         </v-content>
+        <Player />
       </v-app>
     )
   },
