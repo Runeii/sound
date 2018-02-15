@@ -1,11 +1,10 @@
-import { mapGetters } from 'vuex'
 import './style.css'
 import Sidebar from '../Sidebar'
 
 export default {
   data () {
     return {
-      drawer: false
+      open: false
     }
   },
   components: {
@@ -17,7 +16,9 @@ export default {
   render (h) {
     return (
       <v-app id='app'>
-        <Sidebar open={this.drawer} />
+        <v-navigation-drawer id='sidebar' fixed clipped app v-model={this.open}>
+          <Sidebar />
+        </v-navigation-drawer>
         { this.header() }
         <v-content>
           <v-container fluid fill-height>
@@ -29,7 +30,7 @@ export default {
   },
   methods: {
     _openDrawer () {
-      this.drawer = !this.drawer
+      this.open = !this.open
     },
     header () {
       return (

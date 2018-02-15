@@ -8,17 +8,16 @@ export default {
   },
   render () {
     return (
-      <v-navigation-drawer id='sidebar' fixed clipped app v-model={this.drawer}>
         <v-list two-line subheader>
           <v-subheader>Music</v-subheader>
           <v-list-tile avatar on-click={() => this.$router.push({ name: 'Now Playing' })}>
             <v-list-tile-action>
               <v-icon>play_arrow</v-icon>
             </v-list-tile-action>
-            { this.currentTrack['_id']
+            { this.currentTrack
               ? <v-list-tile-content>
                   <v-list-tile-title>Now Playing</v-list-tile-title>
-                  <v-list-tile-sub-title>{this.currentTrack.title} - {this.currentTrack.artist}</v-list-tile-sub-title>
+                  <v-list-tile-sub-title>{this.currentTrack.name} - {this.currentTrack.artist.name}</v-list-tile-sub-title>
                 </v-list-tile-content>
               : <v-list-tile-content style='opacity:0.5'>
                   <v-list-tile-title>Now Playing</v-list-tile-title>
@@ -34,8 +33,6 @@ export default {
               <v-list-tile-sub-title>View music library</v-list-tile-sub-title>
             </v-list-tile-content>
           </v-list-tile>
-        </v-list>
-        <v-list subheader>
           <v-subheader>Settings</v-subheader>
           <v-list-tile avatar on-click={() => this.$router.push({ name: 'Sync' })}>
             <v-list-tile-action>
@@ -56,7 +53,6 @@ export default {
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
-      </v-navigation-drawer>
     )
   }
 }
