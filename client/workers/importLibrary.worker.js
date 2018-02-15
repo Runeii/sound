@@ -50,11 +50,11 @@ onmessage = (e) => {
 
 function structureData (data) {
   const track = {
-    name: data['Name'],
-    artist: data['Artist'],
-    album: data['Album'],
-    length: data['Total Time'],
-    trackNumber: data['Track Number'],
+    name: data['Name'] || '[Untitled]',
+    artist: data['Artist'] || 'Unknown Artist',
+    album: data['Album'] || 'Unknown Album',
+    length: data['Total Time'] || null,
+    trackNumber: data['Track Number'] || null,
     src: {}
   }
   track['src'][deviceID] = data['Location']
@@ -69,7 +69,6 @@ async function processBatch (currentSet) {
       const artist = await db.artists.doc(escape(data.artist))
       const album = await db.albums.doc(escape(data.album))
       const track = await db.tracks.doc(escape(data.name))
-
       batch.set(artist, { name: data.artist, albums: [album] }, { merge: true })
       batch.set(album, { name: data.album, artist: artist }, { merge: true })
       batch.set(track, { ...data, artist: artist, album: album, uuid: uuid() }, { merge: true })

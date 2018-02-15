@@ -26,15 +26,18 @@ export default {
       }
     },
     async source () {
-      if (this.deviceId && this.track.src[this.deviceID]) {
-        return this.track.src[this.deviceId]
+      const currentMachine = await this.deviceId
+      if (currentMachine && this.track.src[currentMachine]) {
+        console.log(this.track.name + ': Playing from local machine')
+        return this.track.src[currentMachine]
       } else if (this.track.src.cloud) {
+        console.log(this.track.name + ': Playing from cloud')
         return await this.getTrackCloudSrc(this.track.uuid)
       }
       return false
     },
     track () {
-      return this.$store.getters.currentTrack
+      return this.$store.getters.currentTrack || {artist: {}, album: {} }
     }
   },
   created () {
