@@ -1,16 +1,17 @@
 CACHE MANIFEST
-#ver:2018-2-14 23:09:31
+#ver:2018-2-24 16:58:47
 #plugin:4.9.0
 
 CACHE:
 ./b3ff83271d61385337da.worker.js
-./vendor.3c4b948b.js
-./client.f23cfd9c.js
+./vendor.1b988fdd.js
+./client.6841b136.js
 ./manifest.27e11fe1.js
-./styles.68cca152.css
+./styles.0df51533.css
 ./styles.9c06bb04.css
 ./
 ./favicon.ico
+./material_icons.woff2
 
 NETWORK:
 *

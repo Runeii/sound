@@ -36,6 +36,7 @@ const db = {
 Vue.use(Vuex)
 
 const state = {
+  queue: [],
   tracks: [],
   artists: [],
   albums: [],

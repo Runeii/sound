@@ -5,7 +5,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const config = require('./config')
 const _ = require('./utils')
-const Dotenv = require('dotenv-webpack');
 
 const base = {
   entry: {
@@ -67,7 +66,8 @@ const base = {
         use: [
           { loader: 'worker-loader' },
           { loader: 'babel-loader' }
-        ]
+        ],
+        exclude: [/node_modules/]
       }
     ]
   },
@@ -84,10 +84,7 @@ const base = {
         // to the root of dist path
         to: './'
       }
-    ]),
-    new Dotenv({
-      path: './.env',
-    })
+    ])
   ],
   target: _.target
 }

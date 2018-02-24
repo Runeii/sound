@@ -69,6 +69,7 @@ async function processBatch (currentSet) {
       const artist = await db.artists.doc(escape(data.artist))
       const album = await db.albums.doc(escape(data.album))
       const track = await db.tracks.doc(escape(data.name))
+      console.log(artist)
       batch.set(artist, { name: data.artist, albums: [album] }, { merge: true })
       batch.set(album, { name: data.album, artist: artist }, { merge: true })
       batch.set(track, { ...data, artist: artist, album: album, uuid: uuid() }, { merge: true })

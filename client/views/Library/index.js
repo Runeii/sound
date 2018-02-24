@@ -1,58 +1,49 @@
-import { mapGetters } from 'vuex'
-
+import { mapActions, mapGetters } from 'vuex'
 export default {
   data () {
     return {
+      view: 'albums'
     }
   },
   computed: {
-    ...mapGetters(['library']),
-    headers () {
-      return [
-        { text: 'Title', value: 'title', align: 'left' },
-        { text: 'Length', value: 'length' },
-        { text: 'Artist', value: 'artist', align: 'left' },
-        { text: 'Album', value: 'album', align: 'left' }
-      ]
+    ...mapGetters(['getTracksByAlbum']),
+    library () {
+      return this.$store.state.library[this.view]
     }
   },
   methods: {
-    displayTrackOptionsMenu (uuid) {
-      const response = confirm('Add track to queue?') // eslint-disable-line
-      if (response === true) {
-        this.queueTrack(uuid)
-      }
+    ...mapActions(['playTrack', 'addToQueue']),
+    async getCollectionOfTracks (type, index) {
+      return await this.getTracksByAlbum(index)
+        .sort((a, b) => a.trackNumber > b.trackNumber)
+        .map(t => { return t.uuid })
     },
-    playTrack (uuid) {
-      this.$store.dispatch('playTrack', uuid)
-      this.$router.push('/?play=true')
+    async playCollection (type, index) {
+      const collection = await this.getCollectionOfTracks(type, index)
+      this.playTrack(collection)
     },
-    queueTrack (uuid) {
-      this.$store.dispatch('queueTrack', uuid)
-    },
-    trackRow (track) {
-      return (
-        <tr onClick={() => this.playTrack(track.uuid)}>
-          <td>{track.name}</td>
-          <td>{this.formatMilliseconds(track.length)}</td>
-          <td>{track.artist.name}</td>
-          <td>{track.album.name}</td>
-          <td>
-            <v-icon onClick={() => this.displayTrackOptionsMenu(track.uuid)}>more_horiz</v-icon>
-          </td>
-        </tr>
-      )
+    async queueCollection (type, index) {
+      const collection = await this.getCollectionOfTracks(type, index)
+      this.addToQueue(collection)
     }
   },
   render (h) {
-    return (
-      <v-data-table hide-actions headers={this.headers} items={this.library} class='elevation-1' { ...{
-        scopedSlots: {
-          items: items => {
-            return this.trackRow(items.item)
-          }
-        }
-      } }></v-data-table>
-    )
+    return (<v-layout row wrap>
+        { this.library.map((album) => {
+          return (
+          <v-flex xs4 sm3><v-card light>
+            <v-card-media onClick={() => this.playCollection('album', album.name)} />
+            <v-card-title primary-title onClick={() => this.playCollection('album', album.name)}>
+              <div>
+                <div class='body-2'>{album.name}</div>
+                <div class='caption grey--text'>{album.artist.name}</div>
+              </div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn icon onClick={() => this.queueCollection('album', album.name)}><v-icon>playlist_add</v-icon></v-btn>
+            </v-card-actions>
+          </v-card></v-flex>)
+        })}
+      </v-layout>)
   }
 }

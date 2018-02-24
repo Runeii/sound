@@ -1,52 +1,35 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import library from './library'
+import player from './player'
 import { deviceId } from '../cross-platform.js'
 
 Vue.use(Vuex)
 
 const state = {
-  deviceId: deviceId,
-  theTrack: new Audio(),
-  currentTrackId: 2,
-  queuedTracks: []
+  deviceId: deviceId(),
 }
 
 const getters = {
   library: (state) => {
-    return state.library.tracks || false
+    return state.library.tracks || []
   },
   getTrackFromLibrary: (state, getters) => (uuid) => {
-    return getters.library.find((track) => { return track['uuid'] === uuid }) || false
+    return state.library.tracks.find((track) => { return track['uuid'] === uuid }) || false
   },
-  currentTrack: (state, getters) => {
-    const currentTrack = getters.getTrackFromLibrary(state.currentTrackId)
-    return currentTrack || false
+// Change once albums have own UUIDs
+  getTracksByAlbum: (state, getters) => (uuid) => {
+    return state.library.tracks.filter((track) => { return track.album.name === uuid }) || false
   },
   deviceId: (state) => {
-    return state.deviceId()
+    return state.deviceId
   }
 }
 
 const mutations = {
-  THE_TRACK_SETTER (state, newValue) {
-    state.theTrack = newValue
-  },
-  PLAY_TRACK (state, uuid) {
-    state.currentTrackId = uuid
-  },
-  QUEUE_TRACK (state, uuid) {
-    state.queuedTracks.push(uuid)
-  }
 }
 
 const actions = {
-  playTrack ({ commit }, uuid) {
-    commit('PLAY_TRACK', uuid)
-  },
-  queueTrack ({ commit, getters }, uuid) {
-    commit('QUEUE_TRACK', uuid)
-  }
 }
 
 const store = new Vuex.Store({
@@ -55,7 +38,8 @@ const store = new Vuex.Store({
   mutations,
   actions,
   modules: {
-    library: library
+    library: library,
+    player: player
   }
 })
 

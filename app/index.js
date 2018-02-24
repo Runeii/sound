@@ -28,7 +28,8 @@ function createWindow () {
     titleBarStyle: 'hidden',
     webPreferences: {
       webSecurity: false,
-      nodeIntegrationInWorker: true
+      nodeIntegrationInWorker: true,
+      experimentalFeatures: true
     }
   })
 

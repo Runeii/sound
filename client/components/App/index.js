@@ -1,6 +1,7 @@
 import './style.css'
 import Sidebar from '../Sidebar'
-import Player from '../Player'
+import PlayDrawer from '../PlayDrawer'
+import Footer from '../Footer'
 
 export default {
   data () {
@@ -9,7 +10,8 @@ export default {
     }
   },
   components: {
-    Sidebar
+    Sidebar,
+    Footer
   },
   created () {
     this.$store.dispatch('setupCloudRefs')
@@ -26,7 +28,8 @@ export default {
             <router-view></router-view>
           </v-container>
         </v-content>
-        <Player />
+        <PlayDrawer />
+        <Footer />
       </v-app>
     )
   },
