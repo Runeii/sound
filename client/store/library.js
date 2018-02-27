@@ -72,7 +72,7 @@ const mutations = {
 
 const actions = {
   setupCloudRefs: firebaseAction(({ bindFirebaseRef }) => {
-    bindFirebaseRef('tracks', db.tracks)
+    bindFirebaseRef('tracks', db.tracks, { maxRefDepth: 0 })
     bindFirebaseRef('albums', db.albums)
     bindFirebaseRef('artists', db.artists)
   }),

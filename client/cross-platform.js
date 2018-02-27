@@ -15,7 +15,7 @@ const deviceId = () => {
   // #endif
 
   // #if process.env.TARGET_ENV === 'mobile'
-  return device.uuid
+  return window.device ? device.uuid : 'not yet'
   // #endif
 }
 

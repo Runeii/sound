@@ -2,8 +2,8 @@ var __wpo = {
   "assets": {
     "main": [
       "./b3ff83271d61385337da.worker.js",
-      "./vendor.1b988fdd.js",
-      "./client.6841b136.js",
+      "./vendor.caa1f48d.js",
+      "./client.3967c7f8.js",
       "./manifest.27e11fe1.js",
       "./styles.0df51533.css",
       "./styles.9c06bb04.css",
@@ -17,12 +17,12 @@ var __wpo = {
   "externals": [],
   "hashesMap": {
     "1566d382077c6d9327d5d5800374ed647921d033": "./b3ff83271d61385337da.worker.js",
-    "a6df697a3a3e3386733d0dd518ca762bdcc9a7b3": "./vendor.1b988fdd.js",
-    "586d5fa34e0cdfe581201e75eaf56eb535dc5e5b": "./client.6841b136.js",
+    "90c150166d4d90fd05d7d5f3941d72a180407ef7": "./vendor.caa1f48d.js",
+    "682ad5b99e305b127fb98ddca3324a83c8fe41b0": "./client.3967c7f8.js",
     "e0f3a1d3beb0c9f84d9f64f2bd9540b7d2686273": "./manifest.27e11fe1.js",
     "47446164fd07b32a34b048ac9292d2d775bb7d71": "./styles.0df51533.css",
     "fea5aed4b4ebcfb8431597316a7601e540bba430": "./styles.9c06bb04.css",
-    "d36b92d3ae6c1ffaea34a415eaae4a0e84fd1dfe": "./",
+    "351039b31d32ac4fc0cbcf9820142a72389b15b1": "./",
     "1f88f14d959244697a68f619f52e622cbea8492b": "./favicon.ico",
     "f4ddff060ff0ba19d8ee04122397557658bc85ee": "./material_icons.woff2"
   },
@@ -30,7 +30,7 @@ var __wpo = {
   "navigateFallbackForRedirects": true,
   "strategy": "changed",
   "responseStrategy": "cache-first",
-  "version": "2018-2-24 16:58:47",
+  "version": "2018-2-24 17:38:48",
   "name": "webpack-offline",
   "pluginVersion": "4.9.0",
   "relativePaths": false

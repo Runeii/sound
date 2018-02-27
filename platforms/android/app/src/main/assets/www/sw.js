@@ -2,14 +2,14 @@ var __wpo = {
   "assets": {
     "main": [
       "./b3ff83271d61385337da.worker.js",
-      "./vendor.5f2d6704.js",
-      "./client.3bde7aa6.js",
+      "./vendor.caa1f48d.js",
+      "./client.3967c7f8.js",
       "./manifest.27e11fe1.js",
-      "./styles.1297b8d8.css",
+      "./styles.0df51533.css",
       "./styles.9c06bb04.css",
       "./",
-      "./material_icons.woff2",
-      "./favicon.ico"
+      "./favicon.ico",
+      "./material_icons.woff2"
     ],
     "additional": [],
     "optional": []
@@ -17,20 +17,20 @@ var __wpo = {
   "externals": [],
   "hashesMap": {
     "1566d382077c6d9327d5d5800374ed647921d033": "./b3ff83271d61385337da.worker.js",
-    "f7aa44c15e53f2ebd500d40d9223e47a19625600": "./vendor.5f2d6704.js",
-    "cd228c6a24fc33acb05b52ffa8fecdace63f251d": "./client.3bde7aa6.js",
+    "90c150166d4d90fd05d7d5f3941d72a180407ef7": "./vendor.caa1f48d.js",
+    "682ad5b99e305b127fb98ddca3324a83c8fe41b0": "./client.3967c7f8.js",
     "e0f3a1d3beb0c9f84d9f64f2bd9540b7d2686273": "./manifest.27e11fe1.js",
-    "26b7f446eec4eae5792f49bf1443a1a49ca39f22": "./styles.1297b8d8.css",
+    "47446164fd07b32a34b048ac9292d2d775bb7d71": "./styles.0df51533.css",
     "fea5aed4b4ebcfb8431597316a7601e540bba430": "./styles.9c06bb04.css",
-    "f0d2393db8ffbc03d13e738eb6fbb23640711175": "./",
-    "f4ddff060ff0ba19d8ee04122397557658bc85ee": "./material_icons.woff2",
-    "1f88f14d959244697a68f619f52e622cbea8492b": "./favicon.ico"
+    "351039b31d32ac4fc0cbcf9820142a72389b15b1": "./",
+    "1f88f14d959244697a68f619f52e622cbea8492b": "./favicon.ico",
+    "f4ddff060ff0ba19d8ee04122397557658bc85ee": "./material_icons.woff2"
   },
   "navigateFallbackURL": "/",
   "navigateFallbackForRedirects": true,
   "strategy": "changed",
   "responseStrategy": "cache-first",
-  "version": "2018-2-16 19:58:35",
+  "version": "2018-2-24 17:38:48",
   "name": "webpack-offline",
   "pluginVersion": "4.9.0",
   "relativePaths": false

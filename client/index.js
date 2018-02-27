@@ -1,4 +1,6 @@
 import './promise-polyfill'
+import './polyfills'
+
 import { app } from './app'
 import './global.scss'
 import '../node_modules/vuetify/dist/vuetify.min.css'

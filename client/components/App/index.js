@@ -1,4 +1,6 @@
 import './style.css'
+import NotificationBar from '../NotificationBar'
+
 import Sidebar from '../Sidebar'
 import PlayDrawer from '../PlayDrawer'
 import Footer from '../Footer'
@@ -11,7 +13,8 @@ export default {
   },
   components: {
     Sidebar,
-    Footer
+    Footer,
+    NotificationBar
   },
   created () {
     this.$store.dispatch('setupCloudRefs')
@@ -19,6 +22,7 @@ export default {
   render (h) {
     return (
       <v-app id='app'>
+        <NotificationBar />
         <v-navigation-drawer id='sidebar' fixed clipped app v-model={this.open}>
           <Sidebar />
         </v-navigation-drawer>
