@@ -5985,6 +5985,10 @@ node-loader@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/node-loader/-/node-loader-0.6.0.tgz#c797ef51095ed5859902b157f6384f6361e05ae8"
 
+node-machine-id@^1.1.10:
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/node-machine-id/-/node-machine-id-1.1.10.tgz#b4cb8f01b25b90d4e0675be00df30e61ee75179b"
+
 node-pre-gyp@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/node-pre-gyp/-/node-pre-gyp-0.10.1.tgz#d518883e27ebc43161bae86f18400dc2b86b7668"
