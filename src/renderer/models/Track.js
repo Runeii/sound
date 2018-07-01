@@ -1,4 +1,5 @@
 import { machineIdSync } from 'node-machine-id'
+import { Howl } from 'howler'
 const deviceID = machineIdSync()
 
 export default class Track {
@@ -12,7 +13,7 @@ export default class Track {
     this.duration = track.duration || 0
     this.artwork = track.artwork || null
 
-    this.object = new Audio()
+    this.object = new Howl()
     this.sources = track.src
 
     this.state = 'Unplayed'
